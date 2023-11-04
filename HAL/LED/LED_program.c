@@ -3,7 +3,8 @@
 /************************     Author: Khaled Mustafa    **************************/
 /************************     Layer: HAL               **************************/ 
 /************************     SWC: LED                  **************************/ 
-/************************     Version: 1.00             **************************/
+/************************     Version: 1.00             ***************************/
+/************************     Driver for Led interfacing             ***************************/
 /*********************************************************************************/
 /*********************************************************************************/
 #include "STD_TYPES.h"
@@ -12,6 +13,13 @@
 #include "DIO_interface.h"
 #include "LED_interface.h"
 
+/*
+Function name: LED_u8TurnOn
+Function prototype: void LED_u8TurnOn(LED_t * LED)
+Function Description: This function turns on Led
+Function paramenters: LED  Pointer to LED_t typedef
+return parameter: None 
+*/
 void LED_u8TurnOn(LED_t * LED)
 {
 	if((LED ->CONNECT_TYPE == SOURCE))
