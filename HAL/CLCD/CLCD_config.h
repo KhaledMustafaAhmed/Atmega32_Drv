@@ -19,4 +19,3 @@
 #define CLCD_E_PIN			DIO_u8PIN2
 
 #endif
-
