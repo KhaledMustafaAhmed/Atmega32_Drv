@@ -15,7 +15,24 @@
 #include "DIO_private.h"
 #include "DIO_config.h"
 
-
+/*
+ * Function Name: DIO_u8SetPinDirection
+ * Function Parameters:
+ *      1. u8 Copy_u8Port - The desired port to configure (A, B, C, or D).
+ *      2. u8 Copy_u8Pin - The specific pin within the chosen port.
+ *      3. u8 Copy_u8Direction - The desired direction for the pin (Input or Output).
+ * Function Return Type: u8
+ * Function Description:
+ *      This function configures the direction of a specific pin on a chosen port.
+ *      Parameters:
+ *          - Copy_u8Port: The port to configure (A, B, C, or D).
+ *          - Copy_u8Pin: The specific pin within the chosen port.
+ *          - Copy_u8Direction: The desired direction for the pin (Input or Output).
+ *      Return:
+ *          - Error state:
+ *              - 0: Function executed successfully.
+ *              - 1: An error occurred during execution.
+ */
 u8 DIO_u8SetPinDirection(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Direction)
 {
 	u8 Local_u8ErrorState = 0;
@@ -57,7 +74,23 @@ u8 DIO_u8SetPinDirection(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Direction)
 	return Local_u8ErrorState;
 }
 
-u8 DIO_u8SetPortnDirection(u8 Copy_u8Port, u8 Copy_u8Direction)
+/*
+ * Function Name: DIO_u8SetPortDirection
+ * Function Parameters:
+ *      1. u8 Copy_u8Port - The desired port to configure (A, B, C, or D).
+ *      2. u8 Copy_u8Direction - The desired direction for the port (Input or Output).
+ * Function Return Type: u8
+ * Function Description:
+ *      This function configures the direction of a specific pin on a chosen port.
+ *      Parameters:
+ *          - Copy_u8Port: The port to configure (A, B, C, or D).
+ *          - Copy_u8Direction: The desired direction for the port (Input or Output).
+ *      Return:
+ *          - Error state:
+ *              - 0: Function executed successfully.
+ *              - 1: An error occurred during execution.
+ */
+u8 DIO_u8SetPortDirection(u8 Copy_u8Port, u8 Copy_u8Direction)
 {
 	u8 Local_u8ErrorState = 0;
 
@@ -73,6 +106,25 @@ u8 DIO_u8SetPortnDirection(u8 Copy_u8Port, u8 Copy_u8Direction)
 	return Local_u8ErrorState;
 }
 
+/*
+ * Function Name: DIO_u8SetPinValue
+ * Function Parameters:
+ *      1. u8 Copy_u8Port - The desired port to configure (A, B, C, or D).
+ *      2. u8 Copy_u8Pin - The specific pin within the chosen port.
+ *      3. u8 Copy_u8Value - The desired value for the pin (High or Low).
+ *
+ * Function Return Type: u8
+ * Function Description:
+ *      This function configures the Value of a specific pin on a chosen port.
+ *      Parameters:
+ *          - Copy_u8Port: The port to configure (A, B, C, or D).
+ *          - Copy_u8Pin: The specific pin within the chosen port.
+ *          - Copy_u8Value: The desired value for the pin (High or Low).
+ *      Return:
+ *          - Error state:
+ *              - 0: Function executed successfully.
+ *              - 1: An error occurred during execution.
+ */
 u8 DIO_u8SetPinValue(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Value)
 {
 	u8 Local_u8ErrorState = 0;
@@ -114,6 +166,22 @@ u8 DIO_u8SetPinValue(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Value)
 	return Local_u8ErrorState;
 }
 
+/*
+ * Function Name: DIO_u8SetPortValue
+ * Function Parameters:
+ *      1. u8 Copy_u8Port - The desired port to configure (A, B, C, or D).
+ *      2. u8 Copy_u8Direction - The desired value for the port (High or Low).
+ * Function Return Type: u8
+ * Function Description:
+ *      This function configures the value of a specific pin on a chosen port.
+ *      Parameters:
+ *          - Copy_u8Port: The port to configure (A, B, C, or D).
+ *          - Copy_u8Direction: The desired value for the port (High or Low).
+ *      Return:
+ *          - Error state:
+ *              - 0: Function executed successfully.
+ *              - 1: An error occurred during execution.
+ */
 u8 DIO_u8SetPortValue(u8 Copy_u8Port, u8 Copy_u8Value)
 {
 	u8 Local_u8ErrorState = 0;
@@ -130,6 +198,24 @@ u8 DIO_u8SetPortValue(u8 Copy_u8Port, u8 Copy_u8Value)
 	return Local_u8ErrorState;
 }
 
+/*
+ * Function Name: DIO_u8GetPinValue
+ * Function Parameters:
+ *      1. u8 Copy_u8Port - The desired port to read the value (A, B, C, or D).
+ *      2. u8 Copy_u8Pin - The specific pin within the chosen port.
+ *      3. u8 *Copy_pu8Value - Pointer to a u8 variable to store the read value of the pin.
+ * Function Return Type: u8
+ * Function Description:
+ *      This function reads the value of a specific pin on a chosen port.
+ *      Parameters:
+ *          - Copy_u8Port: The port from which to read the value (A, B, C, or D).
+ *          - Copy_u8Pin: The specific pin within the chosen port.
+ *          - u8 *Copy_pu8Value: Pointer to a u8 variable to store the read value of the pin.
+ *      Return:
+ *          - Error state:
+ *              - 0: Function executed successfully.
+ *              - 1: An error occurred during execution.
+ */
 u8 DIO_u8GetPinValue(u8 Copy_u8Port, u8 Copy_u8Pin, u8 *Copy_pu8Value)
 {
 	u8 Local_u8ErrorState = 0;
