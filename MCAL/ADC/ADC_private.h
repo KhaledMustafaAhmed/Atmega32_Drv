@@ -25,5 +25,10 @@
 #define	RIGHT_ADJUST	2
 
 
+#define MUX_MASK	0b11100000
+
+#define IDLE	1
+#define BUSY	2
+
 
 #endif
