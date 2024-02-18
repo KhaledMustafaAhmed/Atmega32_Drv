@@ -9,6 +9,14 @@
 /*********************************************************************************/
 /*********************************************************************************/ 
 
+typedef struct{
+	u8 *Channel;
+	u16 *Result;
+	u8 ChainSize;
+	void(*NotificationFunc)(void);
+
+}Chain_T;
+
 /*******************************************************************************************************
   Function Name: ADC_voidInit
   Function Description:
@@ -69,5 +77,29 @@ u8 ADC_u8StartConverstionSynch(u8 Copy_u8Channel);
                function pointer is NULL.
  **************************************************************************************************/
 u8 ADC_u8StartConvertionAsynch(u8 Copy_u8Channel, u8 *Copy_pu8ADCReading, void(*Copy_pvNotificationFunc)(void));
+
+/*******************************************************************************************
+  Function Name: ADC_u8StartChainAsynch
+  Function Parameters:
+       1. Chain_T *Copy_Chain - Pointer to a Chain_T structure containing the configuration
+       for the ADC conversion chain.
+  Function Return Type: u8
+  Function Description:
+       This function initiates an asynchronous ADC conversion chain based on the provided
+       configuration. It sets up the ADC to perform a series of conversions on specified
+       channels asynchronously. The function initializes the necessary parameters for
+       the conversion chain, including channel array, chain size, result array, and a callback
+       function to be executed upon completion of the conversion chain. If the provided pointer
+       to the chain configuration is NULL or the ADC module is busy with another operation,
+       the function returns an error state.
+       Parameters:
+           - Copy_Chain: Pointer to a Chain_T structure containing the configuration for the ADC conversion chain.
+       Return:
+           - Error state:
+               - OK (0): Function executed successfully.
+               - NULL_POINTER (255): Provided pointer to the chain configuration is NULL.
+               - BUSY_FUNC (254): ADC module is currently busy with another operation.
+ **************************************************************************************************/
+u8 ADC_u8StartChainAsynch(Chain_T Copy_Chain);
 
 #endif

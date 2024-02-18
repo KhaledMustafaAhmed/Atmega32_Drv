@@ -9,15 +9,31 @@
 
 #include "STD_TYPES.h"
 #include "BIT_MATH.h" 
-
 #include "ADC_interface.h"
 #include "ADC_private.h"
 #include "ADC_config.h"
 #include "ADC_register.h"
+/*
+    typedef struct{
+	u8 *Channel;
+	u16 *Result;
+	u8 *ChainSize;
+	void(*NotificationFunc)(void);
 
+}Chain_T;
+ */
 static u8* ADC_pu8Reading = NULL;
 static void(*ADC_pvCallBackNotificationFunc)(void) = NULL;
 static u8 ADC_u8State = IDLE;
+
+static u8 *ADC_pu8ChannelArr = NULL; /* Global Variable to carry Channel Array */
+static u8 ADC_pu8ChainSize; /* Global variable to carry ChainSize */
+static u16 *ADC_pu16Result = NULL; /* Global variable to carry ADC_pu8Result */
+
+static u8 ADC_u8ChainIndex = 0;  /* To carry the current conversion index */
+
+static u8 ADC_u8ISRSoruce;
+
 
 void ADC_voidInit(void)
 {
@@ -131,7 +147,10 @@ u8 ADC_u8StartConvertionAsynch(u8 Copy_u8Channel, u8 *Copy_pu8ADCReading, void(*
 		}
 		else
 		{
+			/* Make ADC_u8State BUSY  */
 			ADC_u8State = BUSY;
+			/* Make ISR Source Single_ASYNCH*/
+			ADC_u8ISRSoruce = Single_ASYNCH;
 			/* Initialize the Reading Globally */
 			ADC_pu8Reading = Copy_pu8ADCReading;
 			/* Initialize the NotificationFunc Globally */
@@ -155,19 +174,94 @@ u8 ADC_u8StartConvertionAsynch(u8 Copy_u8Channel, u8 *Copy_pu8ADCReading, void(*
 	return Local_u8ErrorState;
 }
 
+
+u8 ADC_u8StartChainAsynch(Chain_T *Copy_Chain)
+{
+	u8 Local_u8ErrorState = OK;
+	/* Check Pointer Not Equal NULL */
+	if(Copy_Chain == NULL)
+	{
+		Local_u8ErrorState = NULL_POINTER;
+	}
+	else
+	{
+		if(ADC_u8State == IDLE)
+		{
+			/* Make ADC_u8State Busy */
+			ADC_u8State = BUSY;
+			/* Make ISR Source Chain_ASYNCH */
+			ADC_u8ISRSoruce = Chain_ASYNCH;
+			/* initialize Chain channel Array */
+			ADC_pu8ChannelArr  = Copy_Chain->Channel;
+			/* initialize Chain Size */
+			ADC_pu8ChainSize = Copy_Chain->ChainSize;
+			/* initialize Chain result Array */
+			ADC_pu16Result = Copy_Chain->Result;
+			/* initialize chain Notification Function*/
+			ADC_pvCallBackNotificationFunc = Copy_Chain->NotificationFunc;
+			/* initialize current conversion index equal 0 */
+			ADC_u8ChainIndex = 0;
+
+			/* Set required Channel */
+			/* Clear the MUX bit in ADMUX REQ */
+			ADMUX &= MUX_MASK;
+			/* Set the channel needed into MUX BITS */
+			ADMUX |= ADC_pu8ChannelArr[ADC_u8ChainIndex];
+			/* Start Conversion */
+			SET_BIT(ADCSRA,ADCSRA_ADSC);
+			/* Enable ADC interrupt */
+			SET_BIT(ADCSRA,ADCSRA_ADIE);
+		}
+		else
+		{
+			Local_u8ErrorState = BUSY_FUNC;
+		}
+	}
+	return Local_u8ErrorState;
+}
+
+
 void __vector_16(void)  __attribute__((signal));
 void __vector_16(void)
 {
-
-	/* Read ADC Result */
-	*ADC_pu8Reading = ADCH;
-	/* Make ADC State IDLE */
-	ADC_u8State = IDLE;
-	/* Invoke the callback	notification function  */
-	ADC_pvCallBackNotificationFunc();
-
-	/* Disable ADC conversion complete interrupt */
-	CLEAR_BIT(ADCSRA, ADCSRA_ADIE);
-
-
+	if(ADC_u8ISRSoruce == Chain_ASYNCH)
+	{
+		/* Read the current conversion */
+		ADC_pu16Result[ADC_u8ChainIndex] = ADCH;
+		/* increment Index */
+		ADC_u8ChainIndex++;
+		/* check Chain  if finished or not */
+		if(ADC_pu8ChainSize == ADC_u8ChainIndex)
+		{
+			/* finished */
+			/* Make ADC State IDLE */
+			ADC_u8State = IDLE;
+			/* Invoke the callback	notification function  */
+			ADC_pvCallBackNotificationFunc();
+			/* Disable ADC conversion complete interrupt */
+			CLEAR_BIT(ADCSRA, ADCSRA_ADIE);
+		}
+		else
+		{
+			/* chain is not finished */
+			/* Set new required Channel */
+			/* Clear the MUX bit in ADMUX REQ */
+			ADMUX &= MUX_MASK;
+			/* Set the channel needed into MUX BITS */
+			ADMUX |= ADC_pu8ChannelArr[ADC_u8ChainIndex];
+			/* Start Conversion */
+			SET_BIT(ADCSRA,ADCSRA_ADSC);
+		}
+	}
+	else if(ADC_u8ISRSoruce == Single_ASYNCH)
+	{
+		/* Read ADC Result */
+		*ADC_pu8Reading = ADCH;
+		/* Make ADC State IDLE */
+		ADC_u8State = IDLE;
+		/* Invoke the callback	notification function  */
+		ADC_pvCallBackNotificationFunc();
+		/* Disable ADC conversion complete interrupt */
+		CLEAR_BIT(ADCSRA, ADCSRA_ADIE);
+	}
 }

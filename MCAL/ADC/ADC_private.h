@@ -30,5 +30,8 @@
 #define IDLE	1
 #define BUSY	2
 
+#define Chain_ASYNCH	1
+#define Single_ASYNCH	2
+
 
 #endif
