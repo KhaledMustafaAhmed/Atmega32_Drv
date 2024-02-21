@@ -23,10 +23,10 @@ void TIMER0_EnOVFNotification(void);
 */
 u8 TIMER0_Start(u32 reqTime , void(*CallBackFuncNotification)(void));
 /* this function enable the overflow interrupt */
-void TIMER0_EnOVFNotification(void);
+void TIMER0_EnNotification(void);
 
 /* this function disable overflow interrupt */
-void TIMER0_DISOVFNotification(void);
+void TIMER0_DISNotification(void);
 
 
 #endif
