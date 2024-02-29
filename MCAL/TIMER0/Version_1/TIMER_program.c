@@ -131,6 +131,12 @@ u8 TIMER0_Start(u32 reqTime , void(*CallBackFuncNotification)(void))
 	return Local_u8ErrorState;
 }
 
+void Timer0_stop(void)
+{
+    CLEAR_BIT(TCCR0, TCCR0_CS02);
+	CLEAR_BIT(TCCR0, TCCR0_CS01);
+	CLEAR_BIT(TCCR0, TCCR0_CS00);
+}
 /* Enable Overflow timer0 interrupt */
 void TIMER0_EnNotification(void)
 {

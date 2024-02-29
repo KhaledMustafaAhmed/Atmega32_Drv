@@ -28,5 +28,5 @@ void TIMER0_EnNotification(void);
 /* this function disable overflow interrupt */
 void TIMER0_DISNotification(void);
 
-
+void Timer0_stop(void);
 #endif
