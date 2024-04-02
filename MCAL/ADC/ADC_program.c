@@ -29,9 +29,7 @@ static u8 ADC_u8State = IDLE;
 static u8 *ADC_pu8ChannelArr = NULL; /* Global Variable to carry Channel Array */
 static u8 ADC_pu8ChainSize; /* Global variable to carry ChainSize */
 static u16 *ADC_pu16Result = NULL; /* Global variable to carry ADC_pu8Result */
-
 static u8 ADC_u8ChainIndex = 0;  /* To carry the current conversion index */
-
 static u8 ADC_u8ISRSoruce;
 
 
